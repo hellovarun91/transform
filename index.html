@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Transform">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0d0d0d">
+    <title>Varun's Transformation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0d0d0d;
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            color: #e5e5e5;
+            padding: 16px;
+            padding-top: calc(env(safe-area-inset-top, 16px) + 10px);
+            padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 80px);
+            -webkit-overflow-scrolling: touch;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .day { font-size: 13px; color: #666; text-transform: uppercase; letter-spacing: 3px; }
+        .date { font-size: 32px; font-weight: 700; margin: 8px 0; color: #fff; }
+        .card {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 14px;
+            border: 1px solid #2a2a2a;
+        }
+        .card-time {
+            font-size: 11px;
+            color: #f59e0b;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+        .card-title { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: #fff; }
+        .badge {
+            display: inline-block;
+            font-size: 9px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-left: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
+        }
+        .egg-free { background: #22c55e; color: #000; }
+        .has-egg { background: #ef4444; color: #fff; }
+        .family-meal { background: #3b82f6; color: #fff; }
+        .gym-day { background: #a855f7; color: #fff; }
+        .badminton-day { background: #06b6d4; color: #000; }
+        .rest-day { background: #6b7280; color: #fff; }
+        .person { font-size: 15px; color: #a3a3a3; margin: 8px 0; line-height: 1.4; }
+        .person span { color: #4ade80; font-weight: 600; }
+        .kids-note {
+            font-size: 14px;
+            color: #60a5fa;
+            margin-top: 10px;
+            padding: 10px 14px;
+            background: rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
+            line-height: 1.4;
+        }
+        .cook-tip {
+            font-size: 13px;
+            color: #666;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #2a2a2a;
+            line-height: 1.4;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            margin-bottom: 20px;
+            padding: 6px;
+            background: #1a1a1a;
+            border-radius: 16px;
+        }
+        .tab {
+            flex: 1;
+            padding: 12px 8px;
+            border-radius: 12px;
+            background: transparent;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+        .tab:active { transform: scale(0.95); }
+        .tab.active {
+            background: #4ade80;
+            color: #000;
+            font-weight: 700;
+        }
+        .view-toggle {
+            display: flex;
+            gap: 0;
+            margin-bottom: 16px;
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 4px;
+        }
+        .view-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+        .view-btn.active {
+            background: #4ade80;
+            color: #000;
+        }
+        .view-btn:active { transform: scale(0.97); }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #888;
+        }
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .section {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 20px;
+            padding: 18px;
+            margin-top: 20px;
+        }
+        .section-title { color: #4ade80; font-weight: 700; margin-bottom: 14px; font-size: 16px; }
+        .section-item { font-size: 14px; margin: 10px 0; color: #a3a3a3; line-height: 1.4; }
+        .alert {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin-bottom: 18px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            color: #fca5a5;
+        }
+        .goal-alert {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            color: #c4b5fd;
+        }
+        .exercise-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #2a2a2a;
+            font-size: 14px;
+        }
+        .exercise-row:last-child { border-bottom: none; }
+        .exercise-name { color: #e5e5e5; flex: 1; }
+        .exercise-reps { color: #4ade80; font-weight: 600; text-align: right; }
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #2a2a2a;
+            font-size: 13px;
+        }
+        .schedule-item:last-child { border-bottom: none; }
+        .schedule-time { color: #f59e0b; font-weight: 600; width: 80px; }
+        .schedule-activity { color: #e5e5e5; flex: 1; }
+        .workout-type {
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .workout-type-icon { font-size: 48px; margin-bottom: 8px; }
+        .workout-type-name { font-size: 24px; font-weight: 700; color: #fff; }
+        .workout-type-desc { font-size: 14px; color: #888; margin-top: 4px; }
+        @media (max-width: 380px) {
+            .tab { font-size: 11px; padding: 10px 4px; }
+            .card-title { font-size: 16px; }
+            .badge { font-size: 8px; padding: 3px 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="day" id="dayName"></div>
+        <div class="date" id="dateStr"></div>
+    </div>
+
+    <div class="view-toggle">
+        <button class="view-btn active" onclick="setView('meals')">Meals</button>
+        <button class="view-btn" onclick="setView('workout')">Workout</button>
+    </div>
+
+    <div id="mealsView">
+        <div class="alert">
+            Son (5yr): NO EGGS - check badges below
+        </div>
+
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> Egg-Free</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Family Meal</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> Has Eggs</div>
+        </div>
+
+        <div class="tabs" id="mealTabs"></div>
+        <div id="mealsContent"></div>
+        <div class="section" id="prepSection" style="display:none;">
+            <div class="section-title">Sunday Prep (30 min)</div>
+            <div class="section-item">1. Marinate boneless chicken in tikka masala</div>
+            <div class="section-item">2. Pressure cook chana/rajma + dal</div>
+            <div class="section-item">3. Chop onions, tomatoes, salad veggies</div>
+            <div class="section-item">4. Make kid-friendly marinade (less spicy) separately</div>
+        </div>
+    </div>
+
+    <div id="workoutView" style="display:none;">
+        <div class="alert goal-alert">
+            Goal: 90kg → 80-85kg | Gym 3x + Badminton 3x/week
+        </div>
+
+        <div class="tabs" id="workoutTabs"></div>
+
+        <div id="workoutContent"></div>
+    </div>
+
+    <script>
+const meals = {
+    0: { day: "Sunday", meals: [
+        { time: "8:30 AM - BREAKFAST", title: "Relaxed Sunday Breakfast", badge: "egg-free",
+          varun: "Paratha + Chicken keema + Lassi", wife: "Paratha + Chicken keema + Lassi",
+          kids: "Same! Paratha + mild keema (boneless). Daughter can have small pieces",
+          tip: "Whole family eats together - boneless keema is kid-safe" },
+        { time: "1:00 PM - LUNCH", title: "Biryani Day (Treat Meal)", badge: "family",
+          varun: "Chicken Biryani", wife: "Chicken Biryani (boneless pieces)",
+          kids: "Mild chicken pulao for son, same for daughter. Pick boneless pieces",
+          tip: "Can order in or batch cook. Keep kids portion less spicy" },
+        { time: "8:30 PM - DINNER", title: "Light One-Pot", badge: "egg-free",
+          varun: "Dal Khichdi + papad", wife: "Dal Khichdi + papad",
+          kids: "Perfect for kids! Soft, easy to eat. Add ghee", tip: "One pot, 15 min. Whole family same meal" }
+    ], showPrep: true },
+    1: { day: "Monday", meals: [
+        { time: "8:30 AM - BREAKFAST", title: "Protein Start", badge: "has-egg",
+          varun: "4-egg bhurji + 2 toast + milk", wife: "2-egg bhurji + toast + milk (or paneer bhurji)",
+          kids: "SON: Paneer bhurji + toast (NO EGG). Daughter: can have egg or paneer",
+          tip: "Make paneer bhurji first for son, then egg bhurji in same pan" },
+        { time: "1:00 PM - LUNCH", title: "Chicken Curry Day", badge: "family",
+          varun: "Chicken curry + 2 roti + dal", wife: "Chicken curry (boneless) + 2 roti + dal",
+          kids: "Same curry, pick boneless pieces, mash with dal for son. Less spicy portion",
+          tip: "Keep some curry aside before adding full spice for kids" },
+        { time: "8:30 PM - DINNER", title: "Air Fryer Grilled", badge: "egg-free",
+          varun: "Grilled chicken (150g) + salad", wife: "Grilled chicken (boneless) + salad",
+          kids: "Grilled chicken strips for kids - mild marinade. Son loves this!",
+          tip: "Air fryer 180C, 12 min. Make kids portion with less spice" }
+    ]},
+    2: { day: "Tuesday", meals: [
+        { time: "8:30 AM - BREAKFAST", title: "Chicken Morning", badge: "egg-free",
+          varun: "Air fryer chicken + 2 roti + milk", wife: "Air fryer chicken + 2 roti + milk",
+          kids: "Chicken strips + roti + milk. Whole family same!", tip: "Everyone eats same. Air fryer 12 min" },
+        { time: "1:00 PM - LUNCH", title: "Fish Day", badge: "family",
+          varun: "Fish curry + rice + dal", wife: "Fish curry (boneless) + rice + dal",
+          kids: "Fish is great for kids! Remove bones carefully. Mix with rice+dal",
+          tip: "Buy boneless fish (basa) for easy family meal. 15 min" },
+        { time: "8:30 PM - DINNER", title: "Quick Dinner", badge: "has-egg",
+          varun: "4-egg omelette + toast", wife: "2-egg omelette or paneer",
+          kids: "SON: Cheese toast or paneer. Daughter: omelette or same as son", tip: "Quick parallel cooking - 10 min" }
+    ]},
+    3: { day: "Wednesday", meals: [
+        { time: "8:30 AM - BREAKFAST", title: "Mixed Options", badge: "has-egg",
+          varun: "4-egg omelette + 2 toast + milk", wife: "Omelette or Poha + milk",
+          kids: "SON: Poha + milk (egg-free). Daughter: omelette or poha",
+          tip: "Make poha for son, eggs for others. Parallel 10 min" },
+        { time: "1:00 PM - LUNCH", title: "Mutton Day", badge: "egg-free",
+          varun: "Mutton curry + 2 roti", wife: "Boneless mutton or Dal + roti",
+          kids: "Mutton may be tough for kids - give dal + roti + small soft pieces",
+          tip: "Pressure cook mutton well (soft). Kids get dal as backup" },
+        { time: "8:30 PM - DINNER", title: "Soup Night", badge: "egg-free",
+          varun: "Chicken soup + bread", wife: "Chicken soup + bread",
+          kids: "Perfect! Kids love soup. Add bread pieces. Family meal!", tip: "One pot soup, 15 min" }
+    ]},
+    4: { day: "Thursday", meals: [
+        { time: "8:30 AM - BREAKFAST", title: "South Indian", badge: "egg-free",
+          varun: "Upma + chicken (leftover) + milk", wife: "Upma + milk",
+          kids: "Upma is great for kids! Soft, easy. Add veggies", tip: "One pot upma - whole family. 10 min" },
+        { time: "1:00 PM - LUNCH", title: "Keema Day", badge: "family",
+          varun: "Chicken keema + 2 roti + raita", wife: "Chicken keema (boneless!) + 2 roti",
+          kids: "Keema is perfect for kids - no bones! Make mild portion",
+          tip: "Boneless keema = best family meal. Everyone eats same" },
+        { time: "8:30 PM - DINNER", title: "Tikka Night", badge: "egg-free",
+          varun: "Fish tikka + salad", wife: "Fish tikka or Paneer tikka",
+          kids: "Paneer tikka for son (mild). Fish/paneer for daughter", tip: "Air fryer both together, 12 min" }
+    ]},
+    5: { day: "Friday", meals: [
+        { time: "8:30 AM - BREAKFAST", title: "Paratha Day", badge: "has-egg",
+          varun: "4-egg bhurji + 2 paratha + milk", wife: "Egg bhurji or Aloo paratha + milk",
+          kids: "SON: Aloo paratha + curd (egg-free). Daughter: any",
+          tip: "Make aloo paratha batch - works for son & as side" },
+        { time: "1:00 PM - LUNCH", title: "Chicken Curry", badge: "family",
+          varun: "Chicken curry + rice + dal", wife: "Chicken curry (boneless) + rice",
+          kids: "Rice + dal + boneless chicken pieces. Mix together for kids",
+          tip: "Family-friendly meal. Keep mild portion aside" },
+        { time: "8:30 PM - DINNER", title: "Tandoori Night", badge: "egg-free",
+          varun: "Tandoori chicken + salad", wife: "Tandoori chicken (boneless)",
+          kids: "Mild tandoori chicken strips. Kids usually love this!", tip: "Air fryer 200C, 15 min" }
+    ]},
+    6: { day: "Saturday", meals: [
+        { time: "8:30 AM - BREAKFAST", title: "Dosa Day", badge: "egg-free",
+          varun: "Dosa + chicken side + sambar", wife: "Dosa + sambar + chutney",
+          kids: "Kids love dosa! Crispy, fun to eat. Whole family meal", tip: "Dosa batter ready-made OK" },
+        { time: "1:00 PM - LUNCH", title: "Fish Fry", badge: "family",
+          varun: "Fish fry + roti + dal", wife: "Fish fry (boneless) + dal",
+          kids: "Boneless fish pieces for kids. Basa fish = no bones", tip: "Air fryer fish 12 min" },
+        { time: "8:30 PM - DINNER", title: "Light Saturday", badge: "egg-free",
+          varun: "Dal + 1 roti", wife: "Dal + 1 roti + sabzi",
+          kids: "Dal chawal - kids favorite! Simple, nutritious", tip: "Light dinner for everyone. 10 min" }
+    ]}
+};
+
+const workouts = {
+    0: { // Sunday
+        day: "Sunday",
+        type: "rest",
+        icon: "😴",
+        title: "REST DAY",
+        desc: "Sleep in, recover",
+        schedule: [
+            { time: "7:30 AM", activity: "Wake up late - recovery day" },
+            { time: "8:30 AM", activity: "Relaxed breakfast with family" },
+            { time: "Evening", activity: "Light walk if you feel like it" },
+            { time: "10:30 PM", activity: "Sleep - prep for Monday workout" }
+        ]
+    },
+    1: { // Monday
+        day: "Monday",
+        type: "gym",
+        icon: "🏋️",
+        title: "DAY A - PUSH + CORE",
+        desc: "Chest, Shoulders, Triceps, Abs",
+        exercises: [
+            { name: "Bench Press or Push-ups", reps: "3 x 10-12" },
+            { name: "Shoulder Press (dumbbell)", reps: "3 x 10-12" },
+            { name: "Incline Dumbbell Press", reps: "3 x 10" },
+            { name: "Tricep Dips or Pushdowns", reps: "3 x 12" },
+            { name: "Plank", reps: "3 x 30-45 sec" },
+            { name: "Ab Roller (slow tempo)", reps: "3 x 15" }
+        ],
+        schedule: [
+            { time: "6:00 AM", activity: "Wake up - warm water + nimbu" },
+            { time: "6:15 AM", activity: "Pre-workout: Banana + 5 almonds" },
+            { time: "6:30 AM", activity: "GYM - Push + Core workout" },
+            { time: "7:30 AM", activity: "Post-workout protein meal + shower" },
+            { time: "8:30 AM", activity: "Breakfast + vitamins" }
+        ]
+    },
+    2: { // Tuesday
+        day: "Tuesday",
+        type: "badminton",
+        icon: "🏸",
+        title: "BADMINTON",
+        desc: "Cardio + Agility",
+        schedule: [
+            { time: "6:00 AM", activity: "Wake up - warm water + nimbu" },
+            { time: "6:15 AM", activity: "Pre-workout: Banana or black coffee" },
+            { time: "6:30 AM", activity: "BADMINTON - 1 hour session" },
+            { time: "7:30 AM", activity: "Post-workout protein + shower" },
+            { time: "8:30 AM", activity: "Breakfast + vitamins" }
+        ],
+        tips: [
+            "Focus on footwork and quick movements",
+            "Great for cardio and burning fat",
+            "Stay hydrated during play"
+        ]
+    },
+    3: { // Wednesday
+        day: "Wednesday",
+        type: "gym",
+        icon: "🏋️",
+        title: "DAY B - PULL + CORE",
+        desc: "Back, Biceps, Core",
+        exercises: [
+            { name: "Lat Pulldown or Pull-ups", reps: "3 x 8-10" },
+            { name: "Seated Rows", reps: "3 x 10-12" },
+            { name: "Dumbbell Curls", reps: "3 x 12" },
+            { name: "Face Pulls", reps: "3 x 15" },
+            { name: "Hanging Leg Raises", reps: "3 x 10" }
+        ],
+        schedule: [
+            { time: "6:00 AM", activity: "Wake up - warm water + nimbu" },
+            { time: "6:15 AM", activity: "Pre-workout: Banana + 5 almonds" },
+            { time: "6:30 AM", activity: "GYM - Pull + Core workout" },
+            { time: "7:30 AM", activity: "Post-workout protein meal + shower" },
+            { time: "8:30 AM", activity: "Breakfast + vitamins" }
+        ]
+    },
+    4: { // Thursday
+        day: "Thursday",
+        type: "badminton",
+        icon: "🏸",
+        title: "BADMINTON",
+        desc: "Cardio + Agility",
+        schedule: [
+            { time: "6:00 AM", activity: "Wake up - warm water + nimbu" },
+            { time: "6:15 AM", activity: "Pre-workout: Banana or black coffee" },
+            { time: "6:30 AM", activity: "BADMINTON - 1 hour session" },
+            { time: "7:30 AM", activity: "Post-workout protein + shower" },
+            { time: "8:30 AM", activity: "Breakfast + vitamins" }
+        ],
+        tips: [
+            "Focus on footwork and quick movements",
+            "Great for cardio and burning fat",
+            "Stay hydrated during play"
+        ]
+    },
+    5: { // Friday
+        day: "Friday",
+        type: "gym",
+        icon: "🏋️",
+        title: "DAY C - LEGS + FULL BODY",
+        desc: "Legs, Glutes, Full Body",
+        exercises: [
+            { name: "Squats (barbell or goblet)", reps: "4 x 10" },
+            { name: "Romanian Deadlift", reps: "3 x 10" },
+            { name: "Leg Press", reps: "3 x 12" },
+            { name: "Lunges", reps: "3 x 10 each" },
+            { name: "Calf Raises", reps: "3 x 15" }
+        ],
+        schedule: [
+            { time: "6:00 AM", activity: "Wake up - warm water + nimbu" },
+            { time: "6:15 AM", activity: "Pre-workout: Banana + 5 almonds" },
+            { time: "6:30 AM", activity: "GYM - Legs + Full Body workout" },
+            { time: "7:30 AM", activity: "Post-workout protein meal + shower" },
+            { time: "8:30 AM", activity: "Breakfast + vitamins" }
+        ]
+    },
+    6: { // Saturday
+        day: "Saturday",
+        type: "badminton",
+        icon: "🏸",
+        title: "BADMINTON",
+        desc: "Cardio + Fun (or Rest)",
+        schedule: [
+            { time: "7:00 AM", activity: "Wake up - slightly later OK" },
+            { time: "7:15 AM", activity: "Pre-workout: Light snack" },
+            { time: "7:30 AM", activity: "BADMINTON - or Rest if tired" },
+            { time: "8:30 AM", activity: "Breakfast with family" }
+        ],
+        tips: [
+            "Can rest if body needs recovery",
+            "Listen to your body",
+            "Light game is fine"
+        ]
+    }
+};
+
+const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+let currentDay = new Date().getDay();
+let currentView = 'meals';
+
+function setView(view) {
+    currentView = view;
+    document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+
+    document.getElementById('mealsView').style.display = view === 'meals' ? 'block' : 'none';
+    document.getElementById('workoutView').style.display = view === 'workout' ? 'block' : 'none';
+
+    if (view === 'meals') renderMeals(currentDay);
+    else renderWorkout(currentDay);
+}
+
+function renderMeals(dayIndex) {
+    currentDay = dayIndex;
+    const data = meals[dayIndex];
+    const today = new Date();
+
+    document.getElementById('dayName').textContent = data.day;
+    document.getElementById('dateStr').textContent = dayIndex === new Date().getDay() ?
+        today.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : data.day;
+
+    let tabsHtml = '';
+    days.forEach((d, i) => {
+        tabsHtml += `<button class="tab ${i === dayIndex ? 'active' : ''}" onclick="renderMeals(${i})">${d}</button>`;
+    });
+    document.getElementById('mealTabs').innerHTML = tabsHtml;
+
+    let mealsHtml = '';
+    data.meals.forEach(meal => {
+        let badgeHtml = '';
+        if (meal.badge === 'egg-free') badgeHtml = '<span class="badge egg-free">EGG-FREE</span>';
+        else if (meal.badge === 'has-egg') badgeHtml = '<span class="badge has-egg">HAS EGG</span>';
+        else if (meal.badge === 'family') badgeHtml = '<span class="badge family-meal">FAMILY MEAL</span>';
+
+        mealsHtml += `
+            <div class="card">
+                <div class="card-time">${meal.time}</div>
+                <div class="card-title">${meal.title} ${badgeHtml}</div>
+                <div class="person"><span>Varun:</span> ${meal.varun}</div>
+                <div class="person"><span>Wife:</span> ${meal.wife}</div>
+                <div class="kids-note">Kids: ${meal.kids}</div>
+                <div class="cook-tip">${meal.tip}</div>
+            </div>
+        `;
+    });
+    document.getElementById('mealsContent').innerHTML = mealsHtml;
+    document.getElementById('prepSection').style.display = data.showPrep ? 'block' : 'none';
+}
+
+function renderWorkout(dayIndex) {
+    currentDay = dayIndex;
+    const data = workouts[dayIndex];
+    const today = new Date();
+
+    document.getElementById('dayName').textContent = data.day;
+    document.getElementById('dateStr').textContent = dayIndex === new Date().getDay() ?
+        today.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : data.day;
+
+    let tabsHtml = '';
+    days.forEach((d, i) => {
+        tabsHtml += `<button class="tab ${i === dayIndex ? 'active' : ''}" onclick="renderWorkout(${i})">${d}</button>`;
+    });
+    document.getElementById('workoutTabs').innerHTML = tabsHtml;
+
+    let badgeClass = data.type === 'gym' ? 'gym-day' : data.type === 'badminton' ? 'badminton-day' : 'rest-day';
+    let badgeText = data.type.toUpperCase();
+
+    let html = `
+        <div class="workout-type">
+            <div class="workout-type-icon">${data.icon}</div>
+            <div class="workout-type-name">${data.title} <span class="badge ${badgeClass}">${badgeText}</span></div>
+            <div class="workout-type-desc">${data.desc}</div>
+        </div>
+    `;
+
+    // Morning Schedule
+    html += `<div class="card">
+        <div class="card-title">Morning Schedule</div>`;
+    data.schedule.forEach(item => {
+        html += `<div class="schedule-item">
+            <div class="schedule-time">${item.time}</div>
+            <div class="schedule-activity">${item.activity}</div>
+        </div>`;
+    });
+    html += `</div>`;
+
+    // Exercises (for gym days)
+    if (data.exercises) {
+        html += `<div class="card">
+            <div class="card-title">Exercises</div>`;
+        data.exercises.forEach(ex => {
+            html += `<div class="exercise-row">
+                <div class="exercise-name">${ex.name}</div>
+                <div class="exercise-reps">${ex.reps}</div>
+            </div>`;
+        });
+        html += `</div>`;
+    }
+
+    // Tips (for badminton/rest days)
+    if (data.tips) {
+        html += `<div class="card">
+            <div class="card-title">Tips</div>`;
+        data.tips.forEach(tip => {
+            html += `<div class="section-item">• ${tip}</div>`;
+        });
+        html += `</div>`;
+    }
+
+    // Vitamins reminder
+    html += `<div class="section">
+        <div class="section-title">Daily Vitamins (with breakfast)</div>
+        <div class="section-item">• Vitamin D3: 1000-2000 IU</div>
+        <div class="section-item">• Omega-3 Fish Oil: 1 capsule</div>
+        <div class="section-item">• B-Complex: 1 tablet</div>
+        <div class="section-item">• Zinc: 15-30mg</div>
+    </div>`;
+
+    document.getElementById('workoutContent').innerHTML = html;
+}
+
+renderMeals(currentDay);
+
+// Register Service Worker for offline support
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('SW registered'))
+        .catch(err => console.log('SW failed', err));
+}
+    </script>
+</body>
+</html>
