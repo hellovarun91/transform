@@ -59,6 +59,7 @@
         .egg-free { background: #22c55e; color: #000; }
         .has-egg { background: #ef4444; color: #fff; }
         .family-meal { background: #3b82f6; color: #fff; }
+        .pure-veg { background: #16a34a; color: #fff; }
         .gym-day { background: #a855f7; color: #fff; }
         .badminton-day { background: #06b6d4; color: #000; }
         .rest-day { background: #6b7280; color: #fff; }
@@ -229,6 +230,7 @@
         </div>
 
         <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#16a34a"></div> Pure Veg</div>
             <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div> Egg-Free</div>
             <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div> Family Meal</div>
             <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div> Has Eggs</div>
@@ -238,10 +240,12 @@
         <div id="mealsContent"></div>
         <div class="section" id="prepSection" style="display:none;">
             <div class="section-title">Sunday Prep (30 min)</div>
-            <div class="section-item">1. Marinate boneless chicken in tikka masala</div>
-            <div class="section-item">2. Pressure cook chana/rajma + dal</div>
-            <div class="section-item">3. Chop onions, tomatoes, salad veggies</div>
-            <div class="section-item">4. Make kid-friendly marinade (less spicy) separately</div>
+            <div class="section-item">1. Soak rajma & chana overnight (Mon night for Tue/Thu)</div>
+            <div class="section-item">2. Pressure cook dal (enough for 2-3 days)</div>
+            <div class="section-item">3. Chop onions, tomatoes, ginger-garlic paste</div>
+            <div class="section-item">4. Wash & store palak, methi, gobhi in fridge</div>
+            <div class="section-item">5. Marinate chicken for Mon/Wed (mild batch for kids)</div>
+            <div class="section-item">6. Make paneer cubes ready (store in water)</div>
         </div>
     </div>
 
@@ -258,92 +262,101 @@
     <script>
 const meals = {
     0: { day: "Sunday", meals: [
-        { time: "8:30 AM - BREAKFAST", title: "Relaxed Sunday Breakfast", badge: "egg-free",
-          varun: "Paratha + Chicken keema + Lassi", wife: "Paratha + Chicken keema + Lassi",
-          kids: "Same! Paratha + mild keema (boneless). Daughter can have small pieces",
-          tip: "Whole family eats together - boneless keema is kid-safe" },
+        { time: "8:30 AM - BREAKFAST", title: "Relaxed Family Breakfast", badge: "egg-free",
+          varun: "Aloo paratha + curd + lassi", wife: "Aloo paratha + curd + lassi",
+          kids: "Same! Aloo paratha + curd - whole family together",
+          tip: "Make paratha batch together. Family bonding meal" },
         { time: "1:00 PM - LUNCH", title: "Biryani Day (Treat Meal)", badge: "family",
-          varun: "Chicken Biryani", wife: "Chicken Biryani (boneless pieces)",
-          kids: "Mild chicken pulao for son, same for daughter. Pick boneless pieces",
-          tip: "Can order in or batch cook. Keep kids portion less spicy" },
-        { time: "8:30 PM - DINNER", title: "Light One-Pot", badge: "egg-free",
-          varun: "Dal Khichdi + papad", wife: "Dal Khichdi + papad",
-          kids: "Perfect for kids! Soft, easy to eat. Add ghee", tip: "One pot, 15 min. Whole family same meal" }
+          varun: "Chicken Biryani + raita", wife: "Chicken Biryani (boneless) + raita",
+          kids: "Mild veg pulao or chicken pulao for kids. Pick boneless",
+          tip: "Weekly treat! Can order in. Keep kids portion mild" },
+        { time: "8:30 PM - DINNER", title: "Light Khichdi", badge: "egg-free",
+          varun: "Dal Khichdi + papad + pickle", wife: "Dal Khichdi + papad",
+          kids: "Perfect for kids! Soft, easy to digest. Add ghee", tip: "One pot, 15 min. Light after biryani lunch" }
     ], showPrep: true },
     1: { day: "Monday", meals: [
         { time: "8:30 AM - BREAKFAST", title: "Protein Start", badge: "has-egg",
-          varun: "4-egg bhurji + 2 toast + milk", wife: "2-egg bhurji + toast + milk (or paneer bhurji)",
-          kids: "SON: Paneer bhurji + toast (NO EGG). Daughter: can have egg or paneer",
-          tip: "Make paneer bhurji first for son, then egg bhurji in same pan" },
-        { time: "1:00 PM - LUNCH", title: "Chicken Curry Day", badge: "family",
-          varun: "Chicken curry + 2 roti + dal", wife: "Chicken curry (boneless) + 2 roti + dal",
-          kids: "Same curry, pick boneless pieces, mash with dal for son. Less spicy portion",
-          tip: "Keep some curry aside before adding full spice for kids" },
-        { time: "8:30 PM - DINNER", title: "Air Fryer Grilled", badge: "egg-free",
-          varun: "Grilled chicken (150g) + salad", wife: "Grilled chicken (boneless) + salad",
-          kids: "Grilled chicken strips for kids - mild marinade. Son loves this!",
-          tip: "Air fryer 180C, 12 min. Make kids portion with less spice" }
+          varun: "3-egg bhurji + 2 toast + milk", wife: "2-egg bhurji + toast (or paneer bhurji)",
+          kids: "SON: Paneer bhurji + toast (NO EGG). Daughter: egg or paneer",
+          tip: "Make paneer bhurji first for son, then egg bhurji" },
+        { time: "1:00 PM - LUNCH", title: "Palak Paneer Day", badge: "egg-free",
+          varun: "Palak paneer + 2 roti + dal", wife: "Palak paneer + 2 roti",
+          kids: "Kids love paneer! Mild palak paneer for them",
+          tip: "Seasonal palak = iron + protein. Family favorite" },
+        { time: "8:30 PM - DINNER", title: "Grilled Chicken", badge: "egg-free",
+          varun: "Grilled chicken (150g) + salad", wife: "Grilled chicken (100g) + salad",
+          kids: "Mild chicken strips + cucumber. Air fryer easy!",
+          tip: "Air fryer 180C, 12 min. Kids portion less spice" }
     ]},
     2: { day: "Tuesday", meals: [
-        { time: "8:30 AM - BREAKFAST", title: "Chicken Morning", badge: "egg-free",
-          varun: "Air fryer chicken + 2 roti + milk", wife: "Air fryer chicken + 2 roti + milk",
-          kids: "Chicken strips + roti + milk. Whole family same!", tip: "Everyone eats same. Air fryer 12 min" },
-        { time: "1:00 PM - LUNCH", title: "Fish Day", badge: "family",
-          varun: "Fish curry + rice + dal", wife: "Fish curry (boneless) + rice + dal",
-          kids: "Fish is great for kids! Remove bones carefully. Mix with rice+dal",
-          tip: "Buy boneless fish (basa) for easy family meal. 15 min" },
-        { time: "8:30 PM - DINNER", title: "Quick Dinner", badge: "has-egg",
-          varun: "4-egg omelette + toast", wife: "2-egg omelette or paneer",
-          kids: "SON: Cheese toast or paneer. Daughter: omelette or same as son", tip: "Quick parallel cooking - 10 min" }
+        { time: "8:30 AM - BREAKFAST", title: "Poha Morning", badge: "veg",
+          varun: "Poha + sev + milk + banana", wife: "Poha + sev + chai",
+          kids: "Kids love poha! Add peanuts, peas. Whole family same",
+          tip: "Pure veg day! One pot poha - 10 min" },
+        { time: "1:00 PM - LUNCH", title: "Rajma Chawal", badge: "veg",
+          varun: "Rajma + rice + salad + raita", wife: "Rajma + rice + salad",
+          kids: "Rajma chawal = kids favorite! High protein, no spice needed",
+          tip: "Pressure cook rajma (soaked overnight). Family comfort food" },
+        { time: "8:30 PM - DINNER", title: "Gobhi Sabzi Night", badge: "veg",
+          varun: "Aloo gobhi + 2 roti + dal", wife: "Aloo gobhi + 2 roti + dal",
+          kids: "Gobhi is mild, easy for kids. Mash with dal for son",
+          tip: "Seasonal gobhi! Dry sabzi style. 15 min cooking" }
     ]},
     3: { day: "Wednesday", meals: [
-        { time: "8:30 AM - BREAKFAST", title: "Mixed Options", badge: "has-egg",
-          varun: "4-egg omelette + 2 toast + milk", wife: "Omelette or Poha + milk",
-          kids: "SON: Poha + milk (egg-free). Daughter: omelette or poha",
-          tip: "Make poha for son, eggs for others. Parallel 10 min" },
-        { time: "1:00 PM - LUNCH", title: "Mutton Day", badge: "egg-free",
-          varun: "Mutton curry + 2 roti", wife: "Boneless mutton or Dal + roti",
-          kids: "Mutton may be tough for kids - give dal + roti + small soft pieces",
-          tip: "Pressure cook mutton well (soft). Kids get dal as backup" },
-        { time: "8:30 PM - DINNER", title: "Soup Night", badge: "egg-free",
-          varun: "Chicken soup + bread", wife: "Chicken soup + bread",
-          kids: "Perfect! Kids love soup. Add bread pieces. Family meal!", tip: "One pot soup, 15 min" }
+        { time: "8:30 AM - BREAKFAST", title: "Egg & Options", badge: "has-egg",
+          varun: "3-egg omelette + 2 toast + milk", wife: "Omelette or Upma + chai",
+          kids: "SON: Upma + milk (egg-free). Daughter: omelette or upma",
+          tip: "Make upma for son, eggs for others. Parallel cooking" },
+        { time: "1:00 PM - LUNCH", title: "Chicken Curry", badge: "family",
+          varun: "Chicken curry + 2 roti + dal", wife: "Chicken curry (boneless) + roti",
+          kids: "Boneless pieces for kids. Mix with dal + roti",
+          tip: "One chicken curry day. Keep mild portion aside for kids" },
+        { time: "8:30 PM - DINNER", title: "Methi Paneer", badge: "egg-free",
+          varun: "Methi paneer + 2 roti", wife: "Methi paneer + 1 roti + salad",
+          kids: "Paneer pieces for kids. Methi = seasonal, nutritious",
+          tip: "Fresh methi season! High protein veg dinner" }
     ]},
     4: { day: "Thursday", meals: [
-        { time: "8:30 AM - BREAKFAST", title: "South Indian", badge: "egg-free",
-          varun: "Upma + chicken (leftover) + milk", wife: "Upma + milk",
-          kids: "Upma is great for kids! Soft, easy. Add veggies", tip: "One pot upma - whole family. 10 min" },
-        { time: "1:00 PM - LUNCH", title: "Keema Day", badge: "family",
-          varun: "Chicken keema + 2 roti + raita", wife: "Chicken keema (boneless!) + 2 roti",
-          kids: "Keema is perfect for kids - no bones! Make mild portion",
-          tip: "Boneless keema = best family meal. Everyone eats same" },
-        { time: "8:30 PM - DINNER", title: "Tikka Night", badge: "egg-free",
-          varun: "Fish tikka + salad", wife: "Fish tikka or Paneer tikka",
-          kids: "Paneer tikka for son (mild). Fish/paneer for daughter", tip: "Air fryer both together, 12 min" }
+        { time: "8:30 AM - BREAKFAST", title: "Upma Day", badge: "egg-free",
+          varun: "Veg upma + coconut chutney + milk", wife: "Upma + chutney + chai",
+          kids: "Upma is great for kids! Soft, easy. Add veggies",
+          tip: "South Indian morning. One pot - 10 min" },
+        { time: "1:00 PM - LUNCH", title: "Chana Masala", badge: "egg-free",
+          varun: "Chana masala + 2 bhature/roti + salad", wife: "Chana + 2 bhature/roti",
+          kids: "Chana is soft, kids friendly! High protein veg meal",
+          tip: "Chole bhature day! Pressure cook chana. Family loves it" },
+        { time: "8:30 PM - DINNER", title: "Fish Tikka", badge: "egg-free",
+          varun: "Fish tikka + salad + raita", wife: "Fish tikka or Paneer tikka",
+          kids: "Paneer tikka for son (mild). Fish for daughter OK",
+          tip: "Air fryer both together, 12 min. Weekly fish = omega-3" }
     ]},
     5: { day: "Friday", meals: [
         { time: "8:30 AM - BREAKFAST", title: "Paratha Day", badge: "has-egg",
-          varun: "4-egg bhurji + 2 paratha + milk", wife: "Egg bhurji or Aloo paratha + milk",
+          varun: "2-egg bhurji + aloo paratha + milk", wife: "Egg bhurji or Aloo paratha + chai",
           kids: "SON: Aloo paratha + curd (egg-free). Daughter: any",
-          tip: "Make aloo paratha batch - works for son & as side" },
-        { time: "1:00 PM - LUNCH", title: "Chicken Curry", badge: "family",
-          varun: "Chicken curry + rice + dal", wife: "Chicken curry (boneless) + rice",
-          kids: "Rice + dal + boneless chicken pieces. Mix together for kids",
-          tip: "Family-friendly meal. Keep mild portion aside" },
+          tip: "Make paratha batch. Works for everyone" },
+        { time: "1:00 PM - LUNCH", title: "Matar Paneer", badge: "egg-free",
+          varun: "Matar paneer + 2 roti + raita", wife: "Matar paneer + 2 roti",
+          kids: "Matar paneer = kids favorite! Peas + paneer protein",
+          tip: "Seasonal matar (peas). Green, fresh, nutritious" },
         { time: "8:30 PM - DINNER", title: "Tandoori Night", badge: "egg-free",
-          varun: "Tandoori chicken + salad", wife: "Tandoori chicken (boneless)",
-          kids: "Mild tandoori chicken strips. Kids usually love this!", tip: "Air fryer 200C, 15 min" }
+          varun: "Tandoori chicken + salad", wife: "Tandoori chicken (boneless) + salad",
+          kids: "Mild chicken strips for kids. Air fryer crispy!",
+          tip: "Air fryer 200C, 15 min. Friday treat dinner" }
     ]},
     6: { day: "Saturday", meals: [
         { time: "8:30 AM - BREAKFAST", title: "Dosa Day", badge: "egg-free",
-          varun: "Dosa + chicken side + sambar", wife: "Dosa + sambar + chutney",
-          kids: "Kids love dosa! Crispy, fun to eat. Whole family meal", tip: "Dosa batter ready-made OK" },
-        { time: "1:00 PM - LUNCH", title: "Fish Fry", badge: "family",
-          varun: "Fish fry + roti + dal", wife: "Fish fry (boneless) + dal",
-          kids: "Boneless fish pieces for kids. Basa fish = no bones", tip: "Air fryer fish 12 min" },
-        { time: "8:30 PM - DINNER", title: "Light Saturday", badge: "egg-free",
-          varun: "Dal + 1 roti", wife: "Dal + 1 roti + sabzi",
-          kids: "Dal chawal - kids favorite! Simple, nutritious", tip: "Light dinner for everyone. 10 min" }
+          varun: "Dosa + sambar + chutney + milk", wife: "Dosa + sambar + chutney",
+          kids: "Kids love dosa! Crispy, fun. Whole family meal",
+          tip: "Ready-made batter OK. Family breakfast together" },
+        { time: "1:00 PM - LUNCH", title: "Keema Day", badge: "family",
+          varun: "Chicken keema + 2 roti + raita", wife: "Chicken keema (boneless!) + roti",
+          kids: "Keema is perfect - no bones! Make mild portion for kids",
+          tip: "Boneless keema = easy family meal. Everyone same" },
+        { time: "8:30 PM - DINNER", title: "Light Dal Sabzi", badge: "egg-free",
+          varun: "Dal + gajar matar sabzi + 2 roti", wife: "Dal + sabzi + 1 roti",
+          kids: "Dal chawal + mild sabzi. Kids favorite comfort food",
+          tip: "Light dinner. Seasonal gajar (carrots) + matar (peas)" }
     ]}
 };
 
@@ -517,7 +530,8 @@ function renderMeals(dayIndex) {
     let mealsHtml = '';
     data.meals.forEach(meal => {
         let badgeHtml = '';
-        if (meal.badge === 'egg-free') badgeHtml = '<span class="badge egg-free">EGG-FREE</span>';
+        if (meal.badge === 'veg') badgeHtml = '<span class="badge pure-veg">PURE VEG</span>';
+        else if (meal.badge === 'egg-free') badgeHtml = '<span class="badge egg-free">EGG-FREE</span>';
         else if (meal.badge === 'has-egg') badgeHtml = '<span class="badge has-egg">HAS EGG</span>';
         else if (meal.badge === 'family') badgeHtml = '<span class="badge family-meal">FAMILY MEAL</span>';
 
