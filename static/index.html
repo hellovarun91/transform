@@ -1,1 +1,39 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Transform</title></head><body>loading</body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Transform">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="manifest" href="/static/manifest.json">
+<link rel="apple-touch-icon" href="/static/icon-180.png">
+<link rel="icon" href="/static/icon.svg">
+<title>Transform</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div id="login" class="login hidden">
+  <div class="login-card">
+    <div class="brand">TRANSFORM</div>
+    <p class="muted">Enter your PIN</p>
+    <form id="loginForm">
+      <input id="pin" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="PIN" required>
+      <button type="submit" class="btn primary">Unlock</button>
+    </form>
+    <p id="loginErr" class="err"></p>
+  </div>
+</div>
+<main id="view" class="view"></main>
+<nav id="tabs" class="tabs">
+  <a href="#today" data-route="today">Today</a>
+  <a href="#plan" data-route="plan">Plan</a>
+  <a href="#weight" data-route="weight">Weight</a>
+  <a href="#history" data-route="history">History</a>
+  <a href="#settings" data-route="settings">Settings</a>
+</nav>
+<div id="toast" class="toast hidden"></div>
+<script type="module" src="/static/app.js"></script>
+</body>
+</html>
