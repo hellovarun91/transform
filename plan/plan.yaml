@@ -65,8 +65,8 @@ meals:
     - { key: whey_am, time: "08:15", label: "Post-session shake", detail: "Whey 1 scoop in water + creatine 5 g", protein: 25, kcal: 120 }
     - { key: breakfast, time: "09:00", label: "Breakfast", detail: "3 whole eggs + 4 whites with veg (bhurji/omelette) · {toast} · 1 fruit", protein: 36, kcal: 430 }
     - { key: lunch, time: "13:00", label: "Lunch", detail: "{main} · 200 g curd · big salad · {grain}", protein: 45, kcal: 550 }
-    - { key: snack, time: "16:30", label: "Snack", detail: "Whey 1 scoop in water + 1 apple or 30 g roasted chana", protein: 28, kcal: 200 }
-    - { key: dinner, time: "20:15", label: "Dinner", detail: "{main} · sabzi · big salad · {grain}{whey}", protein: 45, kcal: 450 }
+    - { key: snack, time: "16:30", label: "Snack", detail: "Whey 1 scoop in water + 1 apple or 30 g roasted chana", protein: 30, kcal: 200 }
+    - { key: dinner, time: "20:15", label: "Dinner", detail: "{main} · sabzi · big salad · {grain}{whey}", protein: 48, kcal: 450 }
     - { key: bedtime, time: "22:00", label: "Optional", detail: "100 g curd or 200 ml milk", protein: 7, kcal: 80, optional: true }
   gym_day_dinner_whey: " · whey 1 scoop first"
   toast:

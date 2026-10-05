@@ -49,7 +49,7 @@ def test_meal_slots_and_protein(plan):
     slots = {m.key: m for m in dp.meals}
     assert list(slots) == ["banana", "whey_am", "breakfast", "lunch", "snack", "dinner", "bedtime"]
     assert slots["bedtime"].optional and not slots["lunch"].optional
-    assert sum(m.protein for m in dp.meals if not m.optional) == 180
+    assert sum(m.protein for m in dp.meals if not m.optional) == 185
     assert "Palak paneer" in slots["lunch"].detail
     assert "1 roti or ½ cup rice" in slots["lunch"].detail  # court day grain
     assert "No grain" in slots["dinner"].detail
