@@ -1,0 +1,8 @@
+[build]
+builder = "DOCKERFILE"
+
+[deploy]
+startCommand = "python -m transform"
+healthcheckPath = "/health"
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
