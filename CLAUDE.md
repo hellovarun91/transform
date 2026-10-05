@@ -25,6 +25,8 @@ pytest tests/ -v
 
 Railway, Dockerfile build, start `python -m transform`, health `/health`, volume at `/data`.
 
+Live app: https://transform-production-0aee.up.railway.app/#today (health: https://transform-production-0aee.up.railway.app/health). Deployed from the Mac with `railway up`; the Railway project link lives only in the local `.railway/` folder, not in git.
+
 ```bash
 railway up --detach
 railway logs --lines 50
