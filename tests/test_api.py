@@ -93,7 +93,7 @@ def test_past_day_edit_rescores_stored(client, auth, store):
     yesterday = deps.today_ist(client.app.state.settings) - timedelta(days=1)
     store.upsert_day(yesterday, score=0, grade="red")
     client.put("/api/check", headers=auth, json={"date": yesterday.isoformat(), "item_key": "sleep", "state": "done", "value_text": "22:00"})
-    assert store.get_day(yesterday).score == 5  # sleep scores 5 on any day type
+    assert store.get_day(yesterday).score == 20  # sleep 5 + rules default-kept 15, on any day type
 
 
 def test_travel_and_level_applied_in_resolve(client, auth, store, plan):
