@@ -18,3 +18,8 @@ def test_shell_references_exist():
 def test_sw_served_at_root(client):
     r = client.get("/sw.js")
     assert r.status_code == 200 and "javascript" in r.headers["content-type"]
+
+
+def test_static_js_is_no_cache(client):
+    r = client.get("/static/app.js")
+    assert r.status_code == 200 and r.headers["cache-control"] == "no-cache"

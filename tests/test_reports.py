@@ -79,3 +79,9 @@ def test_meta_routes(client, auth, store):
     assert store.list_subscriptions()[0]["endpoint"] == "https://push.example/abc"
     assert client.request("DELETE", "/api/push/subscribe", headers=auth, json={"endpoint": "https://push.example/abc"}).status_code == 200
     assert store.list_subscriptions() == []
+
+
+def test_history_before_start_date_is_unscored(store, plan):
+    rows = history(store, plan, date(2026, 10, 3), date(2026, 10, 5), today=date(2026, 10, 5))
+    assert rows[0]["score"] is None and rows[0]["grade"] is None and rows[1]["score"] is None
+    assert rows[2]["score"] == 0  # start date itself is scored

@@ -26,7 +26,7 @@ def history(store: Store, plan: Plan, start: date, end: date, today: date) -> li
     while d <= end:
         row = rows.get(d)
         checks = store.get_checks(d)
-        if d > today:
+        if d > today or d < plan.start_date:
             score = grade = None
             mode = _resolve(store, plan, d).mode
         elif row and row.locked_at is not None:

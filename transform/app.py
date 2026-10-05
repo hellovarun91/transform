@@ -37,6 +37,13 @@ def create_app(settings: Settings, store=None, plan=None, start_scheduler: bool 
 
     app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
+    @app.middleware("http")
+    async def _no_cache_static(request, call_next):
+        response = await call_next(request)
+        if request.url.path.startswith("/static/"):
+            response.headers["Cache-Control"] = "no-cache"  # ETag revalidation; deploys never serve stale JS
+        return response
+
     if start_scheduler and store is not None and plan is not None:
         from .scheduler import build_scheduler
         app.state.scheduler = build_scheduler(store, plan, settings)
