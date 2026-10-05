@@ -28,9 +28,8 @@ export function h(tag, attrs = {}, ...children) {
 }
 
 export function todayISO() {
-  const n = new Date();
-  const ist = new Date(n.getTime() + (330 + n.getTimezoneOffset()) * 60000);
-  return ist.toISOString().slice(0, 10);
+  // IST is UTC+5:30 with no DST: shift the epoch, then read the UTC calendar date.
+  return new Date(Date.now() + 330 * 60000).toISOString().slice(0, 10);
 }
 
 export function fmtDate(iso, opts = { weekday: 'short', day: 'numeric', month: 'short' }) {
@@ -52,6 +51,11 @@ export function toast(msg, ms = 2200) {
 }
 
 export class QueuedError extends Error {}
+export class OfflineError extends Error {}
+
+const CACHE_PREFIX = 'tf_cache:';
+export function cacheGet(path) { try { return JSON.parse(localStorage.getItem(CACHE_PREFIX + path)); } catch { return null; } }
+function cachePut(path, data) { try { localStorage.setItem(CACHE_PREFIX + path, JSON.stringify(data)); } catch {} }
 
 function readQueue() { try { return JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]'); } catch { return []; } }
 function writeQueue(q) { localStorage.setItem(QUEUE_KEY, JSON.stringify(q)); }
@@ -68,7 +72,9 @@ export async function api(path, { method = 'GET', body } = {}) {
       toast('Offline — saved, will sync');
       throw new QueuedError('queued');
     }
-    throw e;
+    const cached = cacheGet(path);
+    if (cached) { cached._offline = true; return cached; }
+    throw new OfflineError('Offline and nothing cached yet');
   }
   if (res.status === 401) { logout(); throw new Error('unauthorised'); }
   if (!res.ok) {
@@ -77,7 +83,9 @@ export async function api(path, { method = 'GET', body } = {}) {
     if (typeof detail !== 'string') detail = JSON.stringify(detail);
     throw new Error(detail);
   }
-  return res.json();
+  const data = await res.json();
+  if (method === 'GET') cachePut(path, data);
+  return data;
 }
 
 export async function flushQueue() {
@@ -89,6 +97,9 @@ export async function flushQueue() {
     catch (e) { if (!(e instanceof QueuedError)) console.warn('dropped queued write', item, e.message); }
   }
   if (!readQueue().length) { toast(`Synced ${q.length} change${q.length > 1 ? 's' : ''}`); render(); }
+}
+
+export function queueLength() { return readQueue().length;
 }
 
 export function logout() {

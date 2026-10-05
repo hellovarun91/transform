@@ -29,7 +29,7 @@ def get_plan(request: Request) -> Plan:
 
 def require_auth(settings: Settings = Depends(get_settings), authorization: str | None = Header(default=None)) -> None:
     token = authorization.split(" ", 1)[1] if authorization and authorization.lower().startswith("bearer ") else None
-    if not verify_token(settings.secret, token):
+    if not verify_token(settings.secret, settings.pin, token):
         raise HTTPException(401, "unauthorised")
 
 
@@ -123,4 +123,5 @@ def build_day_payload(store: Store, plan: Plan, d: date, settings: Settings, pro
         "streak": compute_streak(store, plan, today),
         "weight": weights[0][1] if weights else None,
         "progression": progression or [],
+        "yesterday_sleep_missing": d == today and d > plan.start_date and "sleep" not in store.get_checks(d - timedelta(days=1)),
     }

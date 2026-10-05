@@ -16,9 +16,10 @@ export async function renderHistory(root) {
   const start = addDays(today, -83);
   const mondayOffset = (new Date(start).getDay() + 6) % 7;
   const gridStart = addDays(start, -mondayOffset);
-  const [hist, week] = await Promise.all([
+  const [hist, week, blocks] = await Promise.all([
     api(`/api/history?from=${gridStart}&to=${today}`),
     api(`/api/week/${isoWeek(selected || today)}`),
+    api('/api/blocks'),
   ]);
   root.innerHTML = '';
   root.append(h('h1', {}, 'History'));
@@ -40,6 +41,12 @@ export async function renderHistory(root) {
     grid.append(h('div', { class: cls, onclick: () => { selected = d.date; renderHistory(root); } }, d.score === null ? '' : d.score));
   }
   root.append(h('div', { class: 'card' }, h('h2', {}, 'Last 12 weeks'), grid));
+
+  root.append(h('div', { class: 'card' }, h('h2', {}, 'Block reviews · 4-week blocks'),
+    ...blocks.blocks.map(b => h('div', { class: 'item' }, h('div', { class: 'body' },
+      h('div', { class: 'title' }, `Block ${b.block + 1} · ${fmtDate(b.start)} – ${fmtDate(b.end)}`, h('span', { class: 'muted small' }, b.complete ? '  complete' : '  in progress')),
+      h('div', { class: 'detail' }, `avg ${b.avg_score} · ${b.green_days}/${b.days_scored} green · ${b.sessions_done} sessions · ${b.lifts_progressed} lifts up · ${b.weight_change === null ? 'no weight data' : (b.weight_change > 0 ? '+' : '') + b.weight_change + ' kg'}`),
+      h('div', { class: 'detail', style: `color:${b.on_plan ? 'var(--green)' : 'var(--red)'}` }, b.on_plan ? 'On plan' : 'Off plan'))))));
 
   if (selected) {
     const day = await api(`/api/day/${selected}`);

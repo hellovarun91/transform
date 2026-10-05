@@ -7,7 +7,8 @@ from datetime import date, timedelta
 from fastapi import APIRouter, Depends, HTTPException, Path, Query
 from pydantic import BaseModel, Field
 
-from ..reports import history, week_scorecard
+from ..guardrails import rescore
+from ..reports import block_review, history, week_scorecard
 from . import deps
 
 router = APIRouter()
@@ -113,8 +114,22 @@ def put_settings(body: SettingsIn, store=Depends(deps.get_store), plan=Depends(d
 def put_travel(body: TravelIn, store=Depends(deps.get_store), plan=Depends(deps.get_plan), settings=Depends(deps.get_settings)):
     if body.end < body.start or (body.end - body.start).days > 60:
         raise HTTPException(422, "bad range")
+    now = deps.now_ist(settings)
+    if deps.is_frozen(body.start, now):
+        raise HTTPException(409, "range starts on a frozen day")
     store.set_travel(body.start, body.end, body.on)
+    d = body.start
+    while d <= body.end and d < now.date():
+        rescore(store, plan, d)  # keep stored scores/history in step with the mode change
+        d += timedelta(days=1)
     return _settings_payload(store, plan, settings)
+
+
+@protected.get("/blocks")
+def get_blocks(store=Depends(deps.get_store), plan=Depends(deps.get_plan), settings=Depends(deps.get_settings)):
+    today = deps.today_ist(settings)
+    current = plan.block_index(today)
+    return {"blocks": [block_review(store, plan, b, today) for b in range(current + 1)]}
 
 
 @protected.get("/export")

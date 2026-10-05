@@ -5,14 +5,15 @@ import hmac
 import time
 
 
-def mint_token(secret: str) -> str:
-    return hmac.new(secret.encode(), b"transform-token-v1", hashlib.sha256).hexdigest()
+def mint_token(secret: str, pin: str) -> str:
+    """Stateless bearer token. Binding the PIN in means changing the PIN revokes every token."""
+    return hmac.new(secret.encode(), b"transform-token-v2:" + pin.encode(), hashlib.sha256).hexdigest()
 
 
-def verify_token(secret: str, token: str | None) -> bool:
+def verify_token(secret: str, pin: str, token: str | None) -> bool:
     if not token:
         return False
-    return hmac.compare_digest(mint_token(secret), token)
+    return hmac.compare_digest(mint_token(secret, pin), token)
 
 
 def verify_pin(expected: str, given: str) -> bool:

@@ -90,3 +90,39 @@ def week_scorecard(store: Store, plan: Plan, iso_year: int, iso_week: int, today
         "weight_start": w_start, "weight_end": w_end, "weight_change": change,
         "verdict": verdict, "on_plan": avg >= 85,
     }
+
+
+def block_review(store: Store, plan: Plan, block_index: int, today: date) -> dict:
+    """Four-week block summary (spec §2.4/§3.5): compliance, sessions, weight change, lifts progressed."""
+    weeks = int(plan.meta["block_weeks"])
+    start = plan.start_date + timedelta(days=block_index * 7 * weeks)
+    end = start + timedelta(days=7 * weeks - 1)
+    last = min(end, today)
+    days = history(store, plan, start, last, today) if start <= today else []
+    scored = [d for d in days if d["score"] is not None]
+    avg = round(sum(d["score"] for d in scored) / len(scored), 1) if scored else 0.0
+    green = sum(1 for d in scored if d["grade"] == "green")
+    sessions = 0
+    if start <= today:
+        d = start
+        while d <= last:
+            dp, checks, _ = _live(store, plan, d)
+            done = {k for k, c in checks.items() if c.state == "done"}
+            sessions += ("travel_circuit" in done) if dp.mode == "travel" else (dp.mode != "rest" and "badminton" in done)
+            d += timedelta(days=1)
+    w_end = _ma7_at(store, last) if start <= today else None
+    w_start = _ma7_at(store, start)
+    change = round(w_end - w_start, 2) if (w_end is not None and w_start is not None) else None
+    progressed = 0
+    if start <= today:
+        keys = {l.exercise_key for i in range((last - start).days + 1) for l in store.get_lifts(start + timedelta(days=i))}
+        for k in keys:
+            first = [s for s in store.lift_sessions(k, last, limit=50) if s["date"] >= start]
+            if len(first) >= 2 and first[0]["top_weight"] > first[-1]["top_weight"]:
+                progressed += 1
+    return {
+        "block": block_index, "start": start.isoformat(), "end": end.isoformat(), "complete": end < today,
+        "avg_score": avg, "green_days": green, "days_scored": len(scored), "sessions_done": sessions,
+        "weight_start": w_start, "weight_end": w_end, "weight_change": change, "lifts_progressed": progressed,
+        "on_plan": avg >= 85,
+    }

@@ -23,9 +23,15 @@ class Settings:
 def load_settings() -> Settings:
     data_dir = os.environ.get("TRANSFORM_DATA_DIR") or ("/data" if os.path.isdir("/data") else "./data")
     os.makedirs(data_dir, exist_ok=True)
+    pin = os.environ.get("TRANSFORM_PIN", "")
+    secret = os.environ.get("TRANSFORM_SECRET", "")
+    if not pin or pin == "0000":
+        raise RuntimeError("TRANSFORM_PIN must be set (and not 0000)")
+    if not secret or secret == "change-me" or len(secret) < 16:
+        raise RuntimeError("TRANSFORM_SECRET must be set to a random string of at least 16 characters")
     return Settings(
-        pin=os.environ.get("TRANSFORM_PIN", "0000"),
-        secret=os.environ.get("TRANSFORM_SECRET", "change-me"),
+        pin=pin,
+        secret=secret,
         data_dir=data_dir,
         vapid_private_key=os.environ.get("VAPID_PRIVATE_KEY", ""),
         vapid_public_key=os.environ.get("VAPID_PUBLIC_KEY", ""),

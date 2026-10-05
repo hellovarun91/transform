@@ -21,4 +21,4 @@ def auth(body: PinIn, request: Request, settings=Depends(get_settings)):
         limiter.record_failure(key)
         raise HTTPException(401, "wrong PIN")
     limiter.reset(key)
-    return {"token": mint_token(settings.secret)}
+    return {"token": mint_token(settings.secret, settings.pin)}

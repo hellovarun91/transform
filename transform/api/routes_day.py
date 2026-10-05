@@ -6,7 +6,7 @@ from typing import Literal
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from ..guardrails import progression_prompts, rescore
+from ..guardrails import apply_sleep_guardrail, progression_prompts, rescore
 from ..timeline import corridor_band, moving_average, projection
 from . import deps
 
@@ -71,6 +71,8 @@ def put_check(body: CheckIn, store=Depends(deps.get_store), plan=Depends(deps.ge
         store.delete_check(body.date, body.item_key)
     else:
         store.upsert_check(body.date, body.item_key, body.state, body.value_num, body.value_text)
+    if body.item_key == "sleep" and body.date < deps.today_ist(settings):
+        apply_sleep_guardrail(store, body.date)  # bedtimes are usually logged the next morning, after the close
     return _after_write(store, plan, settings, body.date)
 
 
@@ -115,7 +117,17 @@ def get_weight(from_: str | None = Query(default=None, alias="from"), to: str | 
             corridor.append({"date": d.isoformat(), "lo": band[0], "hi": band[1], "mid": round((band[0] + band[1]) / 2, 3)})
         d += timedelta(days=1)
     proj = projection(all_series, float(plan.meta["goal_weight"]))
+    flag = None
+    recent = store.get_weights(today - timedelta(days=13), today)
+    passed = [(cd, kg) for cd, kg in plan.checkpoints if cd <= today]
+    if recent and passed:
+        ma7_now = moving_average(recent, 7)[-1][1]
+        cp_date, cp_kg = passed[-1]
+        over_by = round(ma7_now - (cp_kg + plan.band_kg), 2)
+        if over_by > 0:
+            flag = {"date": cp_date.isoformat(), "target": cp_kg, "ma7": ma7_now, "over_by": over_by}
     return {
+        "checkpoint_flag": flag,
         "series": [{"date": d.isoformat(), "kg": kg} for d, kg in series],
         "ma7": [{"date": d.isoformat(), "kg": kg} for d, kg in ma],
         "corridor": corridor,

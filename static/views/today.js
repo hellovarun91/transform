@@ -1,4 +1,4 @@
-import { api, h, toast, fmtDate, addDays, navigate, QueuedError } from '../app.js';
+import { api, h, toast, fmtDate, addDays, navigate, QueuedError, queueLength } from '../app.js';
 
 const expanded = new Set(['court_block', 'gym', 'travel_circuit']);
 let current = null; // last payload from the API
@@ -8,9 +8,29 @@ async function load(date) {
   return current;
 }
 
+function applyLocally(path, body) {
+  // Optimistic update so a queued (offline) tap is visible immediately.
+  if (path === '/api/check') {
+    if (body.state === 'untouched') delete current.checks[body.item_key];
+    else current.checks[body.item_key] = { state: body.state, value_num: body.value_num ?? null, value_text: body.value_text ?? null };
+  } else if (path === '/api/lift') {
+    current.lifts = current.lifts.filter(l => !(l.exercise_key === body.exercise_key && l.set_no === body.set_no));
+    current.lifts.push({ exercise_key: body.exercise_key, set_no: body.set_no, reps: body.reps, weight_kg: body.weight_kg });
+  } else if (path === '/api/rule') {
+    current.rule_breaks = current.rule_breaks.filter(k => k !== body.rule_key);
+    if (body.broken) current.rule_breaks.push(body.rule_key);
+  } else if (path === '/api/weight') {
+    current.weight = body.kg;
+  }
+  current._pending = true;
+}
+
 async function put(path, body) {
   try { current = await api(path, { method: 'PUT', body }); return true; }
-  catch (e) { if (!(e instanceof QueuedError)) toast(e.message); return false; }
+  catch (e) {
+    if (e instanceof QueuedError) { applyLocally(path, body); return true; }
+    toast(e.message); return false;
+  }
 }
 
 function check(k) { return current.checks[k] || { state: 'untouched' }; }
@@ -46,6 +66,12 @@ function draw(root) {
       h('div', { class: 'row between small muted wrap', style: 'margin-top:6px' },
         ...Object.entries(d.score.breakdown).map(([k, v]) => h('span', {}, `${k.slice(0, 5)} ${v}`))))));
 
+  if (d._offline || d._pending) root.append(h('div', { class: 'alert warn' }, `Offline · showing saved copy${queueLength() ? ` · ${queueLength()} change${queueLength() > 1 ? 's' : ''} waiting to sync` : ''}. Score updates after sync.`));
+  if (isToday && d.yesterday_sleep_missing) {
+    const ln = h('input', { class: 'sm', type: 'time' });
+    ln.addEventListener('change', async () => { if (ln.value && await put('/api/check', { date: addDays(d.date, -1), item_key: 'sleep', state: 'done', value_text: ln.value })) { toast('Last night logged'); await load(null); rerender(); } });
+    root.append(h('div', { class: 'card row between' }, h('div', {}, h('div', { class: 'title' }, 'Last night: in bed at?'), h('div', { class: 'detail' }, 'Counts for yesterday. Bed by 22:30 scores 5.')), ln));
+  }
   if (p.adaptation) root.append(h('div', { class: 'alert info' }, 'Weeks 1–2: adaptation. Conservative loads, learn the routine.'));
   for (const pr of d.progression) root.append(h('div', { class: 'alert warn' }, '⬆ ' + pr.message));
   if (p.calorie_level !== 'level0' && p.mode !== 'travel') root.append(h('div', { class: 'alert info' }, `Calorie level: ${p.calorie_level}. Grains adjusted in today's meals.`));

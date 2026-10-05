@@ -55,6 +55,15 @@ def bump_level(store: Store, d: date, reason: str, level: int = 1, days: int = B
             store.set_calorie_level(day, level, reason)
 
 
+def apply_sleep_guardrail(store: Store, d: date) -> str | None:
+    """Run the late-bedtime rule for day d (callable at close or when a past day's bedtime is logged)."""
+    if sleep_rule_hit(store, d):
+        reason = "three nights in bed after 00:30; dinner roti added for 7 days"
+        bump_level(store, d, reason)
+        return reason
+    return None
+
+
 def close_day(store: Store, plan: Plan, d: date, now: datetime) -> dict:
     for key, c in store.get_checks(d).items():
         if key.startswith("meal:") and c.state == "swapped" and not (c.value_text or "").strip():
@@ -66,10 +75,10 @@ def close_day(store: Store, plan: Plan, d: date, now: datetime) -> dict:
     drops = strength_drop(store, dp)
     if drops:
         bump = f"strength dropped two sessions running on {', '.join(drops)}; dinner roti added for 7 days"
-    elif sleep_rule_hit(store, d):
-        bump = "three nights in bed after 00:30; dinner roti added for 7 days"
     if bump:
         bump_level(store, d, bump)
+    else:
+        bump = apply_sleep_guardrail(store, d)
     return {"date": d, "score": r.total, "grade": r.grade, "bump": bump}
 
 

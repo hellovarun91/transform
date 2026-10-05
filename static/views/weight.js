@@ -21,6 +21,7 @@ export async function renderWeight(root) {
     h('div', {}, h('b', {}, band ? band.mid.toFixed(1) : '—'), h('span', {}, 'target today'))));
   root.append(h('div', { class: `alert ${status === 'behind' ? 'bad' : status === 'ahead' ? 'info' : 'warn'}` },
     `${status.toUpperCase()} · goal ${w.goal} kg · ${w.projection ? 'projected ' + fmtDate(w.projection, { day: 'numeric', month: 'short', year: 'numeric' }) : 'need more weigh-ins for a projection'}`));
+  if (w.checkpoint_flag) root.append(h('div', { class: 'alert bad' }, `CHECKPOINT MISSED · ${fmtDate(w.checkpoint_flag.date)} target ${w.checkpoint_flag.target} kg, 7-day avg ${w.checkpoint_flag.ma7.toFixed(1)} kg (${w.checkpoint_flag.over_by.toFixed(1)} kg over the corridor). Tighten meals this week.`));
   if (today < w.creatine_loading_until) root.append(h('div', { class: 'alert info' }, 'Creatine loading: expect +1–1.5 kg of water for two weeks. Not fat.'));
   root.append(h('div', { class: 'card' }, chart(w)));
   root.append(h('div', { class: 'card' }, h('h2', {}, 'Checkpoints'), ...w.checkpoints.map(c => h('div', { class: 'row between detail' }, h('span', {}, fmtDate(c.date, { day: 'numeric', month: 'short', year: 'numeric' })), h('span', {}, `${c.kg} kg`)))));
