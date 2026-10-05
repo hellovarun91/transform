@@ -82,6 +82,6 @@ def test_meta_routes(client, auth, store):
 
 
 def test_history_before_start_date_is_unscored(store, plan):
-    rows = history(store, plan, date(2026, 10, 3), date(2026, 10, 5), today=date(2026, 10, 5))
+    rows = history(store, plan, date(2026, 10, 4), date(2026, 10, 6), today=date(2026, 10, 6))
     assert rows[0]["score"] is None and rows[0]["grade"] is None and rows[1]["score"] is None
     assert rows[2]["score"] == 0  # start date itself is scored

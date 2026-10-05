@@ -91,11 +91,11 @@ def test_travel_overrides_sunday(plan):
 
 
 def test_blocks_and_adaptation(plan):
-    assert plan.resolve(date(2026, 10, 5)).adaptation is True
-    assert plan.resolve(date(2026, 10, 18)).adaptation is True
-    assert plan.resolve(date(2026, 10, 19)).adaptation is False
-    assert plan.resolve(date(2026, 10, 19)).block_index == 0
-    assert plan.resolve(date(2026, 11, 2)).block_index == 1
+    assert plan.resolve(date(2026, 10, 6)).adaptation is True
+    assert plan.resolve(date(2026, 10, 19)).adaptation is True
+    assert plan.resolve(date(2026, 10, 20)).adaptation is False
+    assert plan.resolve(date(2026, 10, 20)).block_index == 0
+    assert plan.resolve(date(2026, 11, 3)).block_index == 1
 
 
 def test_variant_rotation_on_block_boundary(plan):
@@ -112,8 +112,8 @@ def test_supplements_rules_checkpoints(plan):
     assert [s["key"] for s in dp.supplements] == ["creatine", "multivitamin", "omega3", "magnesium"]
     assert len(dp.rules) == 5
     assert dp.bed_by == "22:30"
-    assert plan.checkpoints[0] == (date(2026, 10, 5), 92.0)
-    assert plan.checkpoints[-1] == (date(2027, 1, 15), 81.5)
+    assert plan.checkpoints[0] == (date(2026, 10, 6), 92.0)
+    assert plan.checkpoints[-1] == (date(2027, 1, 16), 81.5)
 
 
 def test_weekday_plan_helper(plan):

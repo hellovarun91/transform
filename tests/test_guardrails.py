@@ -79,7 +79,7 @@ def test_catch_up_closes_only_unscored_days(store, plan):
     closed = catch_up(store, plan, today, NOW)
     dates = [c["date"] for c in closed]
     assert date(2026, 10, 8) not in dates
-    assert date(2026, 10, 7) in dates and date(2026, 10, 9) in dates and date(2026, 10, 5) in dates
+    assert date(2026, 10, 7) in dates and date(2026, 10, 9) in dates and date(2026, 10, 6) in dates
     assert date(2026, 10, 10) not in dates
     assert store.get_day(date(2026, 10, 9)).score == 0
     assert store.get_day(date(2026, 10, 8)).score == 95
