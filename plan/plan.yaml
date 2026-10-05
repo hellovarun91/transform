@@ -1,0 +1,180 @@
+meta:
+  start_date: 2026-10-05
+  start_weight: 92.0
+  goal_weight: 81.5
+  protein_target: 185
+  travel_protein_target: 150
+  block_weeks: 4
+  adaptation_weeks: 2
+  diet_break: { start: 2026-12-06, end: 2026-12-12 }
+  bed_by: "22:30"
+  kcal_level0: 2050
+  kcal_maintenance: 2800
+
+timeline:
+  checkpoints:
+    - { date: 2026-10-05, kg: 92.0 }
+    - { date: 2026-10-18, kg: 89.5 }
+    - { date: 2026-11-01, kg: 88.0 }
+    - { date: 2026-11-29, kg: 84.5 }
+    - { date: 2026-12-05, kg: 84.5 }
+    - { date: 2026-12-12, kg: 84.5 }
+    - { date: 2027-01-15, kg: 81.5 }
+  band_kg: 1.0
+
+notif_times:
+  wake: "05:45"
+  whey_am: "08:15"
+  breakfast: "09:00"
+  lunch: "13:00"
+  snack: "16:30"
+  gym: "18:45"
+  dinner: "20:15"
+  magnesium: "22:00"
+  log_day: "22:15"
+  weekly: "21:00"
+
+rules:
+  - { key: no_sugar_drinks, label: "No sugary drinks" }
+  - { key: no_fried, label: "No fried food" }
+  - { key: no_sweets, label: "No sweets (Sunday lunch excepted)" }
+  - { key: water_3l, label: "3 L water" }
+  - { key: no_alcohol, label: "No alcohol" }
+
+supplements:
+  - { key: creatine, time: "08:15", label: "Creatine 5 g in the morning shake" }
+  - { key: multivitamin, time: "09:00", label: "Multivitamin with breakfast" }
+  - { key: omega3, time: "13:00", label: "Omega-3 with lunch" }
+  - { key: magnesium, time: "22:00", label: "Magnesium glycinate before bed" }
+
+schedule:
+  wake: { time: "05:45", label: "Wake · 500 ml water · black coffee" }
+  badminton: { time: "06:30", label: "Badminton · 3 games", points: 8 }
+  court_block: { time: "07:45", label: "Court block" }
+  gym: { time: "19:00", label: "Gym", points: 6 }
+  sleep: { time: "22:30", label: "Lights out by 22:30" }
+  rest: { time: "08:00", label: "Rest day · log it", points: 20 }
+  run: { time: "07:00", label: "Optional easy 5 km run", points: 0 }
+  travel_circuit: { time: "07:00", label: "Hotel circuit · 20 min", points: 25 }
+
+court_block_points: { court_weights: 12, core: 6 }
+
+meals:
+  slots:
+    - { key: banana, time: "06:15", label: "Pre-session", detail: "1 banana", protein: 1, kcal: 105 }
+    - { key: whey_am, time: "08:15", label: "Post-session shake", detail: "Whey 1 scoop in water + creatine 5 g", protein: 25, kcal: 120 }
+    - { key: breakfast, time: "09:00", label: "Breakfast", detail: "3 whole eggs + 4 whites with veg (bhurji/omelette) · {toast} · 1 fruit", protein: 36, kcal: 430 }
+    - { key: lunch, time: "13:00", label: "Lunch", detail: "{main} · 200 g curd · big salad · {grain}", protein: 45, kcal: 550 }
+    - { key: snack, time: "16:30", label: "Snack", detail: "Whey 1 scoop in water + 1 apple or 30 g roasted chana", protein: 28, kcal: 200 }
+    - { key: dinner, time: "20:15", label: "Dinner", detail: "{main} · sabzi · big salad · {grain}{whey}", protein: 45, kcal: 450 }
+    - { key: bedtime, time: "22:00", label: "Optional", detail: "100 g curd or 200 ml milk", protein: 7, kcal: 80, optional: true }
+  gym_day_dinner_whey: " · whey 1 scoop first"
+  toast:
+    level0: "1 multigrain toast"
+    level1: "1 multigrain toast"
+    level2: "2 multigrain toast"
+    maintenance: "2 multigrain toast"
+  grain_lunch:
+    level0: { court: "1 roti or ½ cup rice", gym: "2 roti or 1 cup rice" }
+    level1: { court: "1 roti or ½ cup rice", gym: "2 roti or 1 cup rice" }
+    level2: { court: "2 roti or 1 cup rice", gym: "2 roti or 1 cup rice" }
+    maintenance: { court: "2 roti + 1 cup rice", gym: "2 roti + 1 cup rice" }
+  grain_dinner:
+    level0: "No grain"
+    level1: "1 roti"
+    level2: "1 roti"
+    maintenance: "2 roti or 1 cup rice"
+  mains:          # weekday 0 = Monday
+    0: { lunch: "Palak paneer 150 g", dinner: "Egg curry, 3 eggs" }
+    1: { lunch: "Rajma", dinner: "Paneer tikka 150 g, air-fried" }
+    2: { lunch: "Soya chunk curry, 50 g dry", dinner: "Tofu stir-fry 200 g", dinner_swap: "Grilled chicken 150 g" }
+    3: { lunch: "Chana masala", dinner: "Moong dal chilla ×3 with paneer stuffing" }
+    4: { lunch: "Matar paneer 150 g", dinner: "Besan-egg omelette, 3 eggs" }
+    5: { lunch: "Dal tadka 1.5 cups", dinner: "Paneer bhurji 150 g", dinner_swap: "Fish tikka 150 g" }
+    6: { lunch: "Flexible meal · one plate · log what you ate", dinner: "Dal khichdi + curd", dinner_grain: "1 cup rice (refeed)" }
+  travel:
+    banana: "1 banana or fruit before training"
+    whey_am: "Rule1 sachet, 1 scoop · creatine"
+    breakfast: "Eggs: 4–6 whole/whites, any style · log protein grams"
+    lunch: "Dal / paneer / curd / chicken · no fried · log protein grams"
+    snack: "Rule1 sachet or roasted chana · log protein grams"
+    dinner: "Protein + sabzi + salad · no buffet seconds · log protein grams"
+    bedtime: "Curd or milk if available"
+  sunday_prep:
+    - "Soak rajma and chana for Tue/Thu"
+    - "Pressure-cook dal for 3 days"
+    - "Boil 20 eggs for the week's whites"
+    - "Cut paneer into 150 g portions, store in water"
+    - "Chop salad veg for Mon–Wed"
+    - "Portion whey + creatine into 12 sachets"
+
+workouts:
+  court:         # Mon/Wed/Fri; weekday → session
+    0:
+      title: Push
+      exercises:
+        - { key: push_ups, name: "Push-ups", sets: 3, reps: "15-20", variants: ["Decline push-ups"] }
+        - { key: db_shoulder_press, name: "DB shoulder press 10 kg", sets: 3, reps: "12", variants: ["Single-arm DB press 10 kg"] }
+        - { key: diamond_push_ups, name: "Diamond push-ups", sets: 3, reps: "12" }
+        - { key: pike_push_ups, name: "Pike push-ups", sets: 3, reps: "10" }
+        - { key: plank, name: "Plank", sets: 3, reps: "45 s" }
+    2:
+      title: Pull
+      exercises:
+        - { key: rod_row, name: "Rod bent-over row 35 kg", sets: 4, reps: "12", variants: ["Rod Pendlay row 35 kg"] }
+        - { key: db_row, name: "Single-arm DB row 10 kg", sets: 3, reps: "15" }
+        - { key: db_curl_court, name: "DB curl 10 kg", sets: 3, reps: "12" }
+        - { key: rod_upright_row, name: "Rod upright row", sets: 3, reps: "12" }
+        - { key: side_plank, name: "Side plank", sets: 3, reps: "30 s each" }
+    4:
+      title: Legs
+      exercises:
+        - { key: goblet_squat, name: "Goblet squat 10 kg", sets: 3, reps: "15", variants: ["Rod front squat"] }
+        - { key: bulgarian_split_squat, name: "Bulgarian split squat", sets: 3, reps: "10/leg" }
+        - { key: rod_rdl, name: "Rod RDL 35 kg", sets: 3, reps: "12" }
+        - { key: walking_lunges, name: "Walking lunges", sets: 3, reps: "12/leg" }
+        - { key: glute_bridge, name: "Glute bridge", sets: 3, reps: "20" }
+        - { key: calf_raises_court, name: "Calf raises", sets: 3, reps: "20" }
+  core:
+    title: "Core + mobility"
+    exercises:
+      - { key: dead_bug, name: "Dead bug", sets: 3, reps: "10" }
+      - { key: bird_dog, name: "Bird-dog", sets: 3, reps: "10" }
+      - { key: hollow_hold, name: "Hollow hold", sets: 3, reps: "30 s" }
+      - { key: stretch, name: "Hip-flexor + hamstring stretch", sets: 1, reps: "5 min" }
+  gym:           # Tue/Thu/Sat
+    1:
+      title: Upper push
+      exercises:
+        - { key: bench_press, name: "Bench press", sets: 4, reps: "6-8", variants: ["Incline barbell press"] }
+        - { key: incline_db_press, name: "Incline DB press", sets: 3, reps: "10", variants: ["Flat DB press"] }
+        - { key: seated_db_shoulder_press, name: "Seated DB shoulder press", sets: 3, reps: "10" }
+        - { key: cable_fly, name: "Cable fly", sets: 3, reps: "12" }
+        - { key: triceps_pushdown, name: "Triceps rope pushdown", sets: 3, reps: "12" }
+        - { key: face_pull, name: "Face pull", sets: 3, reps: "15" }
+    3:
+      title: Lower
+      exercises:
+        - { key: back_squat, name: "Back squat", sets: 4, reps: "6-8", variants: ["Front squat"] }
+        - { key: rdl, name: "Romanian deadlift", sets: 3, reps: "8-10" }
+        - { key: leg_press, name: "Leg press", sets: 3, reps: "12", variants: ["Hack squat"] }
+        - { key: leg_curl, name: "Leg curl", sets: 3, reps: "12" }
+        - { key: hanging_leg_raise, name: "Hanging leg raise", sets: 3, reps: "12" }
+        - { key: calf_raise, name: "Standing calf raise", sets: 3, reps: "15" }
+    5:
+      title: Upper pull
+      exercises:
+        - { key: pull_ups, name: "Pull-ups or lat pulldown", sets: 4, reps: "8", variants: ["Chin-ups"] }
+        - { key: barbell_row, name: "Barbell row", sets: 4, reps: "10", variants: ["T-bar row"] }
+        - { key: chest_supported_row, name: "Chest-supported row", sets: 3, reps: "12" }
+        - { key: overhead_press, name: "Overhead press", sets: 3, reps: "8" }
+        - { key: db_curl, name: "DB curl", sets: 3, reps: "12" }
+        - { key: rear_delt_fly, name: "Rear-delt fly", sets: 3, reps: "15" }
+  travel_circuit:
+    title: "Hotel circuit · 4 rounds"
+    exercises:
+      - { key: tc_push_ups, name: "Push-ups", sets: 4, reps: "15" }
+      - { key: tc_squats, name: "Squats", sets: 4, reps: "20" }
+      - { key: tc_reverse_lunges, name: "Reverse lunges", sets: 4, reps: "10/leg" }
+      - { key: tc_plank, name: "Plank", sets: 4, reps: "45 s" }
+      - { key: tc_mountain_climbers, name: "Mountain climbers", sets: 4, reps: "30 s" }
